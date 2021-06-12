@@ -1,0 +1,10 @@
+.main-container {
+  width: 800px;
+  margin: 0 auto;
+
+  .fixed-at-top {
+    position: sticky;
+    top: 0;
+    width: 100%;
+  }
+}

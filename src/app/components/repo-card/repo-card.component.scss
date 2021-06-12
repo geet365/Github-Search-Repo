@@ -1,0 +1,30 @@
+a {
+  color: inherit;
+  text-decoration: auto;
+}
+
+.repo-card {
+  display: flex;
+  align-items: center;
+
+  border: 1px solid gray;
+  margin: 10px 0;
+  padding: 24px;
+
+  img {
+    border-radius: 50%;
+    height: 72px;
+    width: 72px;
+    flex: 1;
+  }
+
+  &-details {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 24px;
+
+    p {
+      width: 50%;
+    }
+  }
+}

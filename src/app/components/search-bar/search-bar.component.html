@@ -1,0 +1,11 @@
+<div class="search-bar">
+  <input
+    type="text"
+    placeholder="Search github repo"
+    (input)="onSearch($event)"
+  />
+  <img *ngIf="isLoading" src="https://icons8.com/preloaders/preloaders/1483/Basketball.gif" />
+  <div class="sorting-group" *ngIf="hasQueryApplied">
+    <button *ngFor="let sortableProp of sortableProps" (click)="sortBy(sortableProp)">{{sortableProp.label}} {{getSortIcon(sortableProp)}}</button>
+  </div>
+</div>

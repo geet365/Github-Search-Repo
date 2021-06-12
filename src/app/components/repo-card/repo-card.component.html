@@ -1,0 +1,8 @@
+<a [href]="repo.html_url">
+  <div class="repo-card">
+    <img [src]="repo.owner.avatar_url" />
+    <div class="repo-card-details">
+      <p *ngFor="let prop of props"><strong>{{prop.label}}:</strong> {{get(repo, prop.path)}}</p>
+    </div>
+  </div>
+</a>
