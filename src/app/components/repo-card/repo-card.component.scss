@@ -7,9 +7,14 @@ a {
   display: flex;
   align-items: center;
 
-  border: 1px solid gray;
+  border: 1px solid darkcyan;
   margin: 10px 0;
-  padding: 24px;
+  padding: 12px;
+
+  &:hover {
+    background-color: #fbeded;
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 16%);
+  }
 
   img {
     border-radius: 50%;
@@ -21,10 +26,18 @@ a {
   &-details {
     display: flex;
     flex-wrap: wrap;
-    padding-left: 24px;
+    padding-left: 10px;
 
     p {
       width: 50%;
+    }
+  }
+
+  @media only screen and (min-width: 800px) {
+    padding: 24px;
+
+    &-details {
+      padding-left: 24px;
     }
   }
 }

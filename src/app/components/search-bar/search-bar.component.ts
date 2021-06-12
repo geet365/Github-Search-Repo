@@ -10,7 +10,8 @@ type SortableProp = { label: string; path: string };
 })
 export class SearchBarComponent {
   sortableProps: SortableProp[] = [
-    { label: 'Updated at', path: 'updated' },
+    { label: 'Stars', path: 'stars' },
+    { label: 'Updated at', path: 'updated' }
   ];
 
   isLoading = false;
