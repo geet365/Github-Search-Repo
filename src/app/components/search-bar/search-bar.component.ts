@@ -29,7 +29,7 @@ export class SearchBarComponent {
   }
 
   constructor(private githubRepoSearch: GithubRepoSearchService) {
-    this.githubRepoSearch.loader.subscribe(isLoading => {
+    this.githubRepoSearch.isLoading.subscribe(isLoading => {
       this.isLoading = isLoading;
     });
   }
@@ -48,10 +48,13 @@ export class SearchBarComponent {
   }
 
   sortBy(sortableProp: SortableProp) {
+    /** Sorting doesn't make sense if search query is not set  */
     if (this.githubRepoSearch.currentQuery) {
       let order: SORT_ORDER = 'asc';
 
+      /** Toggle order if user clicked on sorted by button */
       if (this.sortedBy === sortableProp.path) {
+        /** Remove sorting if order is desc */
         if (this.sortOrder === 'desc') {
           this.githubRepoSearch.setSortAttributes(null, null);
           return;
@@ -62,5 +65,4 @@ export class SearchBarComponent {
       this.githubRepoSearch.setSortAttributes(sortableProp.path, order);
     }
   }
-
 }

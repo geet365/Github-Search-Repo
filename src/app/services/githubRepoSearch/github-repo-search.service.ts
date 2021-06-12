@@ -24,17 +24,18 @@ export class GithubRepoSearchService {
 
   sortOrder: SORT_ORDER | null;
 
-  repoList = [];
-
-  httpSubject = new Subject<{ q: string; page: string, sort?: string, order?: SORT_ORDER }>();
-
-  httpResponse: Observable<GithubRepoQueryResponse>;
-
+  /** subject to broadcast list of repo to  */
   emitData = new Subject<GithubRepo[]>();
 
-  loader = new Subject<boolean>();
+  /** object to indicate if an api is in progress */
+  isLoading = new Subject<boolean>();
 
-  recentRequest: Subscription = null;
+  /** keeps list of loaded repo */
+  private repoList = [];
+
+  private httpSubject = new Subject<{ q: string; page: string, sort?: string, order?: SORT_ORDER }>();
+
+  private httpResponse: Observable<GithubRepoQueryResponse>;
 
   constructor(private http: HttpClient) {
     this.httpResponse = this.httpSubject.pipe(
@@ -56,14 +57,15 @@ export class GithubRepoSearchService {
           finalParams.order = this.sortOrder;
         }
 
-        this.loader.next(true);
+        this.isLoading.next(true);
+
         return this.http
           .get<GithubRepoQueryResponse>(this.githubRepoUrl, {
             params: finalParams,
           })
           .pipe(
             catchError((errorResp) => {
-              this.loader.next(false);
+              this.isLoading.next(false);
               window.alert(errorResp.error.message);
               return EMPTY;
             }),
@@ -71,7 +73,7 @@ export class GithubRepoSearchService {
               if (resp) {
                 resp.query = query;
               }
-              this.loader.next(false);
+              this.isLoading.next(false);
               return resp;
             })
           );
@@ -89,17 +91,19 @@ export class GithubRepoSearchService {
     });
   }
 
-  onData() {
-    return this.emitData;
-  }
-
-  fetch() {
+  private fetch() {
     this.httpSubject.next({
       q: this.currentQuery,
       page: this.currentPage.toString(),
     });
   }
 
+  /** returns observable to listen repoList changes */
+  onData() {
+    return this.emitData;
+  }
+
+  /** Triggers searching */
   search(query: string) {
     this.repoList = [];
     if (query.trim()) {
@@ -111,6 +115,7 @@ export class GithubRepoSearchService {
     }
   }
 
+  /** Loads next page and append to repoList */
   nextPage() {
     if (this.currentQuery) {
       this.currentPage += 1;
@@ -124,20 +129,7 @@ export class GithubRepoSearchService {
     }
   }
 
-  prevPage() {
-    if (this.currentQuery) {
-      this.currentPage -= 1;
-
-      if (this.currentPage < 1) {
-        this.currentPage = 1;
-        console.warn('No previous page available');
-        return;
-      }
-
-      this.fetch();
-    }
-  }
-
+  /** Applies/removes sorting */
   setSortAttributes(attribute: string | null, order: SORT_ORDER | null) {
     this.sortBy = attribute;
     this.sortOrder = order;
